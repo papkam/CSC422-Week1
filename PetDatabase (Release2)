@@ -1,0 +1,279 @@
+/*
+ * The purpose of this program is to create a database for pet names
+ * and ages, and allow users to interact with the database.
+ */
+package csc422.software.engineering;
+
+/**
+ *
+ * @author Michael Papka
+ * email: papkam@csp.edu
+ */
+
+import java.util.Scanner;
+import java.util.ArrayList;
+
+public class PetDatabase {
+    
+    //Main method just starts up the store program
+    public static void main(String[] args) {
+        new PetTable().start();
+
+    }
+}
+
+class PetTable {
+    public void start(){
+        
+        //Create list of Pet objects
+        ArrayList<Pet> PetList = new ArrayList<>();
+        
+        boolean looper = true;
+        
+        while (looper){
+            System.out.println("\nPet Database Program.");
+            System.out.println("What would you like to do?");
+            System.out.println("1) View all pets");
+            System.out.println("2) Add more pets");
+            System.out.println("3) Update an existing pet");
+            System.out.println("4) Remove an existing pet");
+            System.out.println("5) Search pets by name");
+            System.out.println("6) Search pets by age");
+            System.out.println("7) Exit program");
+            System.out.print("Your choice: ");
+            Scanner userInput = new Scanner(System.in);
+            int choice = userInput.nextInt();
+            
+            if (choice == 1){
+                
+                //header
+                System.out.println("+-----------------------+");
+                System.out.printf("%-3s %-10s %4s\n", "| ID |", "NAME", "| AGE |");
+                System.out.println("+-----------------------+");
+                
+                //Cycle through Pet objects, separately pull name and age
+                int rows = 0;
+                for (int i = 0; i < PetList.size(); i++){
+                    
+                    String currentName = PetList.get(i).getName();
+                    int currentAge = PetList.get(i).getAge();
+                    
+                    
+                    /*Code to make sure formatting looks pretty.
+                    If ID or age are two-digit, it throws format off.
+                    This block of if-statements meticulously corrects that.*/
+                    
+                    if (currentAge <= 9 && i > 9){
+                        System.out.printf("%3s %-10s %-4s\n","| " + i + " |", currentName, "|   " + currentAge + " |");
+                    }
+                    else if (currentAge > 9 && i <= 9){
+                        System.out.printf("%3s %-10s %-4s\n","|  " + i + " |", currentName, "|  " + currentAge + " |");
+                    }
+                    else if (currentAge > 9 && i > 9){
+                        System.out.printf("%3s %-10s %-4s\n","| " + i + " |", currentName, "|  " + currentAge + " |");
+                    }
+                    else{
+                        System.out.printf("%3s %-10s %-4s\n","|  " + i + " |", currentName, "|   " + currentAge + " |");
+                    }
+                    rows++;
+                }
+                
+                //footer
+                System.out.println("+-----------------------+");
+                if (rows == 1){
+                    System.out.println(rows + " row in set.");
+                } 
+                else{
+                   System.out.println(rows + " rows in set."); 
+                }
+                
+            }else if (choice == 2){
+                
+                boolean newPetLooper = true;
+                int addedPetsCounter = 0;
+                
+                //Allow user to add new pet 
+                while (newPetLooper){
+                    System.out.print("add pet (name, age): ");
+                    Scanner input = new Scanner(System.in);
+                    String newPet = input.nextLine();
+                    
+                    //Break free from add pet loop
+                    if (newPet.equals("done") || newPet.equals("Done")){
+                        if (addedPetsCounter == 1){
+                            System.out.println(addedPetsCounter + " pet added.");
+                        }
+                        else{
+                            System.out.println(addedPetsCounter + " pets added.");
+                        }
+                        newPetLooper = false;
+                    }
+                    
+                    //Add each pet using .split to read name and age
+                    else{
+                        String[] splitCurrentLine = newPet.split(" ");
+                        Pet myPet = new Pet(splitCurrentLine[0], Integer.parseInt(splitCurrentLine[1]));
+                        PetList.add(myPet);
+                        addedPetsCounter++;
+                    }
+                }
+                
+            }else if (choice == 3){
+                //updatePet()
+                
+            }else if (choice == 4){
+                //removePet()
+                
+            }else if (choice == 5){
+                System.out.print("Enter a name to search: ");
+                Scanner input = new Scanner(System.in);
+                String nameSearch = input.next();
+                
+                //header
+                System.out.println("+-----------------------+");
+                System.out.printf("%-3s %-10s %4s\n", "| ID |", "NAME", "| AGE |");
+                System.out.println("+-----------------------+");
+                
+                //Cycle through Pet objects, checking each name
+                int rows = 0;
+                for (int i = 0; i < PetList.size(); i++){
+                    
+                    String currentName = PetList.get(i).getName();
+                    int currentAge = PetList.get(i).getAge();
+                    
+                    if (currentName.equalsIgnoreCase(nameSearch)){
+                        
+                    /*Code to make sure formatting looks pretty.
+                    If ID or age are two-digit, it throws format off.
+                    This block of if-statements meticulously corrects that.*/
+                    
+                    if (currentAge < 9 && i > 9){
+                        System.out.printf("%3s %-10s %-4s\n","| " + i + " |", currentName, "|   " + currentAge + " |");
+                    }
+                    else if (currentAge > 9 && i < 9){
+                        System.out.printf("%3s %-10s %-4s\n","|  " + i + " |", currentName, "|  " + currentAge + " |");
+                    }
+                    else if (currentAge > 9 && i > 9){
+                        System.out.printf("%3s %-10s %-4s\n","| " + i + " |", currentName, "|  " + currentAge + " |");
+                    }
+                    else{
+                        System.out.printf("%3s %-10s %-4s\n","|  " + i + " |", currentName, "|   " + currentAge + " |");
+                    }
+                    rows++;
+                    }
+                }
+                
+                //footer
+                System.out.println("+-----------------------+");
+                if (rows == 1){
+                    System.out.println(rows + " row in set.");
+                } 
+                else{
+                   System.out.println(rows + " rows in set."); 
+                }
+                
+            }else if (choice == 6){
+                System.out.print("Enter age to search: ");
+                Scanner input = new Scanner(System.in);
+                int ageSearch = input.nextInt();
+                
+                //header
+                System.out.println("+-----------------------+");
+                System.out.printf("%-3s %-10s %4s\n", "| ID |", "NAME", "| AGE |");
+                System.out.println("+-----------------------+");
+                
+                //Cycle through Pet objects, checking each age
+                int rows = 0;
+                for (int i = 0; i < PetList.size(); i++){
+                    
+                    String currentName = PetList.get(i).getName();
+                    int currentAge = PetList.get(i).getAge();
+                    
+                    if (currentAge == ageSearch){
+                        
+                    /*Code to make sure formatting looks pretty.
+                    If ID or age are two-digit, it throws format off.
+                    This block of if-statements meticulously corrects that.*/
+                    
+                    if (currentAge < 9 && i > 9){
+                        System.out.printf("%3s %-10s %-4s\n","| " + i + " |", currentName, "|   " + currentAge + " |");
+                    }
+                    else if (currentAge > 9 && i < 9){
+                        System.out.printf("%3s %-10s %-4s\n","|  " + i + " |", currentName, "|  " + currentAge + " |");
+                    }
+                    else if (currentAge > 9 && i > 9){
+                        System.out.printf("%3s %-10s %-4s\n","| " + i + " |", currentName, "|  " + currentAge + " |");
+                    }
+                    else{
+                        System.out.printf("%3s %-10s %-4s\n","|  " + i + " |", currentName, "|   " + currentAge + " |");
+                    }
+                    rows++;
+                    }
+                }
+                
+                //footer
+                System.out.println("+-----------------------+");
+                if (rows == 1){
+                    System.out.println(rows + " row in set.");
+                } 
+                else{
+                   System.out.println(rows + " rows in set."); 
+                }
+                
+            }else if (choice == 7){
+                
+                //Terminate program
+                System.out.println("Goodbye!");
+                looper = false;
+                
+            }else{
+                
+               //Handle any other number input
+               System.out.println("Please select a valid number.");
+            }
+        }
+    } 
+}
+
+class Pet {
+    private String name;
+    private int age;
+    
+    public Pet(String name, int age){
+        this.name = name;
+        this.age = age;
+    }
+
+    /**
+     * @return the name
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * @param name the name to set
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /**
+     * @return the age
+     */
+    public int getAge() {
+        return age;
+    }
+
+    /**
+     * @param age the age to set
+     */
+    public void setAge(int age) {
+        this.age = age;
+    }
+    
+    @Override
+    public String toString(){
+        return name + " " + age;
+    }
+}
